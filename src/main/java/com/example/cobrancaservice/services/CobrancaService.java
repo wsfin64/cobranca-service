@@ -61,7 +61,7 @@ public class CobrancaService {
                     if (fat.getIdPortador() != idPortador && fat.getIdAssistencia() != idAssistencia && fat.getDataVenciamento() != diaVencimento){
 
                         if(portador.getAdesaoAtiva() == true){
-                            Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento, assistenciaNome, this.gerarCodigoDeBarras(idAssistencia, idPortador));
+                            Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento, assistenciaNome, this.gerarCodigoDeBarras(idAssistencia, idPortador, diaVencimento));
 
                             faturaRepository.save(fatura);
 
@@ -73,7 +73,7 @@ public class CobrancaService {
                 }
             }else {
                 if(portador.getAdesaoAtiva() == true){
-                    Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento, assistenciaNome, this.gerarCodigoDeBarras(idAssistencia, idPortador));
+                    Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento, assistenciaNome, this.gerarCodigoDeBarras(idAssistencia, idPortador, diaVencimento));
 
                     faturaRepository.save(fatura);
 
@@ -86,16 +86,11 @@ public class CobrancaService {
 
     }
 
-    public String gerarCodigoDeBarras(Long idAssistencia, Long idPortador){
+    public String gerarCodigoDeBarras(Long idAssistencia, Long idPortador, LocalDate dataVencimento){
 
         String cod = "" + idAssistencia;
 
-        Random gerador = new Random();
-
-        for (int i = 0; i < 5; i++){
-            int valor = gerador.nextInt();
-            cod = cod + valor;
-        }
+        cod = cod + dataVencimento.getDayOfMonth() + dataVencimento.getMonthValue() + dataVencimento.getYear();
 
         cod = cod + idPortador;
 
