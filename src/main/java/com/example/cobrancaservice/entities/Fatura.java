@@ -21,18 +21,21 @@ public class Fatura implements Serializable {
     String nomePortador;
     Double valorAssistencia;
     String status;
-    Integer codigoFatura;
+    String codigoFatura;
     LocalDate dataVenciamento;
+    String assistenciaNome;
 
     public Fatura(){}
 
-    public Fatura(Long idPortador, Long idAssistencia, String nomePortador, Double valorAssistencia, String status, LocalDate dataVenciamento) {
+    public Fatura(Long idPortador, Long idAssistencia, String nomePortador, Double valorAssistencia, String status, LocalDate dataVenciamento, String assistenciaNome, String codigoFatura) {
         this.idPortador = idPortador;
         this.idAssistencia = idAssistencia;
         this.nomePortador = nomePortador;
         this.valorAssistencia = valorAssistencia;
         this.status = status;
         this.dataVenciamento = dataVenciamento;
+        this.assistenciaNome = assistenciaNome;
+        this.codigoFatura = codigoFatura;
     }
 
     public Long getIdPortador() {
@@ -75,11 +78,11 @@ public class Fatura implements Serializable {
         this.status = status;
     }
 
-    public Integer getCodigoFatura() {
+    public String getCodigoFatura() {
         return codigoFatura;
     }
 
-    public void setCodigoFatura(Integer codigoFatura) {
+    public void setCodigoFatura(String codigoFatura) {
         this.codigoFatura = codigoFatura;
     }
 

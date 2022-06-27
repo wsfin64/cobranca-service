@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @EnableAsync
@@ -33,7 +34,7 @@ public class CobrancaService {
 
     @Async
     @Scheduled(fixedRate = 5000)
-    public void scheduleFixedRateTask() {
+    public void verificarFaturamentos() {
 
         LocalDate hoje = LocalDate.now();
 
@@ -51,6 +52,7 @@ public class CobrancaService {
             Long idAssistencia = portador.getAssistencia().getIdAssistencia();
             String nomePortador = portador.getNome();
             Double valorAssistencia = portador.getAssistencia().getValor();
+            String assistenciaNome = portador.getAssistencia().getNome();
 
             List<Fatura> faturasRegistradas = faturaRepository.findFaturaByIdAssistenciaAndIdPortadorAndDataVenciamento(idAssistencia, idPortador, diaVencimento);
 
@@ -58,25 +60,46 @@ public class CobrancaService {
                 for(Fatura fat : faturasRegistradas){
                     if (fat.getIdPortador() != idPortador && fat.getIdAssistencia() != idAssistencia && fat.getDataVenciamento() != diaVencimento){
 
-                        Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento);
+                        if(portador.getAdesaoAtiva() == true){
+                            Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento, assistenciaNome, this.gerarCodigoDeBarras(idAssistencia, idPortador));
 
-                        faturaRepository.save(fatura);
+                            faturaRepository.save(fatura);
 
-                        System.out.printf("Nova Fatura gerada, vencimento = " + fatura.getDataVenciamento());
+                            System.out.printf("Nova Fatura gerada, vencimento = " + fatura.getDataVenciamento());
+                        }
+
+
                     }
                 }
             }else {
-                Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento);
+                if(portador.getAdesaoAtiva() == true){
+                    Fatura fatura = new Fatura(idPortador, idAssistencia, nomePortador, valorAssistencia, StatusFatura.PENDENTE.toString(), diaVencimento, assistenciaNome, this.gerarCodigoDeBarras(idAssistencia, idPortador));
 
-                faturaRepository.save(fatura);
-                System.out.printf("Nova Fatura gerada, vencimento = " + fatura.getDataVenciamento());
+                    faturaRepository.save(fatura);
+
+                    System.out.printf("Nova Fatura gerada, vencimento = " + fatura.getDataVenciamento());
+                }
             }
 
 
         }
 
-
-
-
     }
+
+    public String gerarCodigoDeBarras(Long idAssistencia, Long idPortador){
+
+        String cod = "" + idAssistencia;
+
+        Random gerador = new Random();
+
+        for (int i = 0; i < 5; i++){
+            int valor = gerador.nextInt();
+            cod = cod + valor;
+        }
+
+        cod = cod + idPortador;
+
+        return cod;
+    }
+
 }
