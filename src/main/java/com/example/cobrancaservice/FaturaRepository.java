@@ -11,4 +11,6 @@ import java.util.List;
 public interface FaturaRepository extends JpaRepository<Fatura, Long> {
 
     List<Fatura> findFaturaByIdAssistenciaAndIdPortadorAndDataVenciamento(Long idAssistencia, Long idPortador, LocalDate dataVencimento);
+
+    List<Fatura> findFaturaByIdPortador(Long idPortador);
 }

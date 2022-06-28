@@ -1,7 +1,7 @@
 package com.example.cobrancaservice.services;
 
 import com.example.cobrancaservice.FaturaRepository;
-import com.example.cobrancaservice.config.SpringConfig;
+import com.example.cobrancaservice.entities.DTO.StatusDTO;
 import com.example.cobrancaservice.entities.Fatura;
 import com.example.cobrancaservice.entities.Portador;
 import com.example.cobrancaservice.entities.StatusFatura;
@@ -13,12 +13,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @EnableAsync
-public class CobrancaService {
+public class FaturaService {
 
     @Autowired
     AdesaoClient adesaoClient;
@@ -95,6 +95,46 @@ public class CobrancaService {
         cod = cod + idPortador;
 
         return cod;
+    }
+
+    public List<Fatura> getFaturasPorPortador(Long idPortador){
+        return faturaRepository.findFaturaByIdPortador(idPortador);
+    }
+
+    public List<Fatura> listarFaturas(){
+        return faturaRepository.findAll();
+    }
+
+    public Fatura faturaPorId(Long id){
+        return faturaRepository.findById(id).get();
+    }
+
+    public List<StatusFatura> listarStatusFatura(){
+        return Arrays.asList(StatusFatura.values());
+    }
+
+    public Fatura alterarStatusFatura(Long idfatura, StatusDTO statusDTO){
+        Fatura fatura = this.faturaPorId(idfatura);
+
+        List<StatusFatura> status = Arrays.asList(StatusFatura.values());
+
+        for(StatusFatura st : status){
+            if (String.valueOf(st).equals(statusDTO.getStatus())){
+                fatura.setStatus(statusDTO.getStatus());
+
+                return faturaRepository.save(fatura);
+            }
+        }
+
+        return fatura;
+    }
+
+    public Fatura cancelarFatura(Long idFatura){
+        Fatura fatura = this.faturaPorId(idFatura);
+
+        fatura.setStatus("CANCELADA");
+
+        return faturaRepository.save(fatura);
     }
 
 }

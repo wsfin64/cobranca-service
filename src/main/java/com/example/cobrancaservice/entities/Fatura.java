@@ -14,16 +14,16 @@ public class Fatura implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idFatura;
+    private Long idFatura;
 
-    Long idPortador;
-    Long idAssistencia;
-    String nomePortador;
-    Double valorAssistencia;
-    String status;
-    String codigoFatura;
-    LocalDate dataVenciamento;
-    String assistenciaNome;
+    private Long idPortador;
+    private Long idAssistencia;
+    private String nomePortador;
+    private Double valorAssistencia;
+    private String status;
+    private String codigoFatura;
+    private LocalDate dataVenciamento;
+    private String assistenciaNome;
 
     public Fatura(){}
 
