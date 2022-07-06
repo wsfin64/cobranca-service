@@ -1,6 +1,6 @@
 package com.example.cobrancaservice.services;
 
-import com.example.cobrancaservice.FaturaRepository;
+import com.example.cobrancaservice.repositories.FaturaRepository;
 import com.example.cobrancaservice.entities.DTO.StatusDTO;
 import com.example.cobrancaservice.entities.Fatura;
 import com.example.cobrancaservice.entities.Portador;
@@ -136,6 +136,24 @@ public class FaturaService {
         fatura.setStatus("CANCELADA");
 
         return faturaRepository.save(fatura);
+    }
+
+    public Fatura buscarFaturaPorCodigoFatura(String codigoFatura){
+        return faturaRepository.findFaturaByCodigoFatura(codigoFatura);
+    }
+
+    public void baixaFatura(String codigoFatura){
+
+        Fatura fatura = buscarFaturaPorCodigoFatura(codigoFatura);
+
+        if (fatura != null && !fatura.getStatus().equals("PAGA")){
+            fatura.setStatus(StatusFatura.PAGA.toString());
+            faturaRepository.save(fatura);
+
+            System.out.println("Fatura de ID " + fatura.getCodigoFatura() + " paga");
+        }
+
+
     }
 
 }
