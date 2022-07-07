@@ -6,6 +6,7 @@ import com.example.cobrancaservice.entities.Fatura;
 import com.example.cobrancaservice.entities.Portador;
 import com.example.cobrancaservice.entities.StatusFatura;
 import com.example.cobrancaservice.feign.AdesaoClient;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,9 +29,16 @@ public class FaturaService {
     FaturaRepository faturaRepository;
 
     public List<Portador> listarPortadorPorDiaFaturamento(Long diaFaturamento){
-        List<Portador> portadores = adesaoClient.listarPortadoresDiaFaturamento(diaFaturamento);
+        try{
+            List<Portador> portadores = adesaoClient.listarPortadoresDiaFaturamento(diaFaturamento);
+            return portadores;
+        }
+        catch (FeignException e){
+            System.out.println("Serviço adesão indisponível no momento!");
 
-        return portadores;
+        }
+
+        return new ArrayList();
     }
 
     @Async
