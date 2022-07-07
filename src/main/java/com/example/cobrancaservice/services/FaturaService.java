@@ -42,7 +42,7 @@ public class FaturaService {
     }
 
     @Async
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 15000)
     public void verificarFaturamentos() {
 
         LocalDate hoje = LocalDate.now();

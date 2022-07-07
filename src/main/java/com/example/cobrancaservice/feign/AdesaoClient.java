@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Component
-@FeignClient(name = "adesao-service", url = "http://localhost:8080/api")
+@FeignClient(name = "adesao-service", url = "https://adesao-service-pdist.herokuapp.com/api")
 public interface AdesaoClient {
 
     @GetMapping("/portadores/faturamento/{diaFaturamento}")
