@@ -41,7 +41,7 @@ public class FaturaService {
         return new ArrayList();
     }
 
-    @Async
+
     @Scheduled(fixedRate = 15000)
     public void verificarFaturamentos() {
 
