@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component
 @FeignClient(name = "adesao-service", url = "https://adesao-service-pdist.herokuapp.com/api")
+//@FeignClient(name = "adesao-service", url = "http://localhost:8080/api")
 public interface AdesaoClient {
 
     @GetMapping("/portadores/faturamento/{diaFaturamento}")
